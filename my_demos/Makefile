@@ -1,0 +1,28 @@
+all:
+	(cd timerLib && make install)
+	(cd 1-led && make)
+	(cd 2* && make)
+	(cd 3* && make)
+	(cd 4* && make)
+	(cd 5* && make)
+	(cd 6* && make)
+	(cd 7* && make)
+	(cd 8* && make)
+	(cd 9* && make)
+	(cd 10* && make)
+	(cd 11* && make)
+
+clean:
+	(cd timerLib && make clean)
+	(cd 1-led && make clean)
+	(cd 2* && make clean)
+	(cd 3* && make clean)
+	(cd 4* && make clean)
+	(cd 5* && make clean)
+	(cd 6* && make clean)
+	(cd 7* && make clean)
+	(cd 8* && make clean)
+	(cd 9* && make clean)
+	(cd 10* && make clean)
+	(cd 11* && make clean)
+	rm -rf h lib

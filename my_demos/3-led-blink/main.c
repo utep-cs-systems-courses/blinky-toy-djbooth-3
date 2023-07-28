@@ -1,0 +1,79 @@
+//Alternate LEDs from Off, Green, and Red
+#include <msp430.h>
+#include "libTimer.h"
+#include "led.h"
+
+int main(void) {
+  P1DIR |= LEDS;
+  P1OUT |= LED_GREEN;
+  P1OUT |= LED_RED;
+
+  configureClocks();		/* setup master oscillator, CPU & peripheral clocks */
+  enableWDTInterrupts();	/* enable periodic interrupt */
+  
+  or_sr(0x18);			/* CPU off, GIE on */
+}
+
+// global state var to count time
+int secondCount = 0;
+
+int toggle = 0;
+
+void
+__interrupt_vec(WDT_VECTOR) WDT()	/* 250 interrupts/sec */
+{
+  secondCount ++;
+  if (secondCount == 24 && toggle == 0)  /* once each sec... */
+    {
+      P1OUT ^= LED_GREEN;                /* toggle green led */
+      toggle = 1;
+    }
+  else if (secondCount == 84 && toggle == 1)
+    {
+      P1OUT ^= LED_RED;                 // toggle red led
+      toggle = 0;
+    }
+  else if (secondCount == 108 && toggle == 0)
+    {
+      P1OUT ^= LED_GREEN;
+      toggle = 1;
+    }
+  else if (secondCount == 132 && toggle == 1)
+    {
+      P1OUT ^= LED_RED;
+      toggle = 0;
+    }
+  else if (secondCount == 156 && toggle == 0)
+    {
+      P1OUT ^= LED_GREEN;
+      toggle = 1;
+    }
+  else if (secondCount == 180 && toggle == 1)
+    {
+      P1OUT ^= LED_RED;
+      toggle = 0;
+    }
+  else if (secondCount == 204 && toggle == 0)
+    {
+      P1OUT ^= LED_GREEN;
+      toggle = 1;
+    }
+  else if (secondCount == 228 && toggle == 0)
+    {
+      P1OUT ^= LED_RED;
+      toggle = 0;
+    }
+  else if (secondCount >= 250 && toggle == 0)
+    {
+      secondCount = 0;		/* reset count */
+      P1OUT ^= LED_GREEN;
+      toggle = 1;
+    }
+  else if (secondCount >= 250 && toggle == 1)
+    {
+      secondCount = 0;
+      P1OUT ^= LED_RED;
+      toggle = 0;
+    }
+}
+
